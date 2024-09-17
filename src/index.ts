@@ -132,20 +132,20 @@ controls.update();
 // Tweakpane controls
 const pane = new Pane();
 
-pane.addBinding(options, "parallelogramRoundness", {
-  label: "Roundness",
-  min: 0,
-  max: 1,
-});
 pane.addBinding(material, "roughness", {
+  label: "Clarity",
   min: 0,
   max: 1,
+  inverted: true,
 });
 pane.addBinding(material, "transmission", {
+  label: "Transparency",
   min: 0,
   max: 1,
+  inverted: true,
 });
 pane.addBinding(material, "thickness", {
+  label: "Refraction",
   min: 0,
   max: 15,
 });
@@ -158,13 +158,15 @@ pane.addBinding(material, "clearcoatRoughness", {
   max: 1,
 });
 pane.addBinding(material, "envMapIntensity", {
+  label: "Env. 💡",
   min: 0,
   max: 1,
 });
 pane
   .addBinding(material, "normalScale", {
-    min: -1,
-    max: 1,
+    label: "Texture",
+    y: { inverted: true, min: -1, max: 1 },
+    x: { inverted: true, min: -1, max: 1 },
   })
   .on("change", function (e) {
     material.clearcoatNormalScale = e.value;
