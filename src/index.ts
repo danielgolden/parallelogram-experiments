@@ -117,8 +117,12 @@ matrix.makeShear(0.12, 0, 0, 0, 0, 0);
 boxGeometry.applyMatrix4(matrix);
 parallelogramMesh.position.set(0, 0, 5);
 
-scene.add(parallelogramMesh);
+const group = new THREE.Group();
+group.add(parallelogramMesh);
+
+scene.add(group);
 scene.environment;
+
 
 // Orbit controls
 const controls = new threeControls.OrbitControls(camera, renderer.domElement);
@@ -132,37 +136,48 @@ controls.update();
 // Tweakpane controls
 const pane = new Pane();
 
-pane.addBinding(material, "roughness", {
+const materialFolder = pane.addFolder({
+  title: "Material"
+});
+const lightingFolder = pane.addFolder({
+  title: "Lighting"
+});
+const positionFolder = pane.addFolder({
+  title: "Scale/Orientation"
+});
+
+materialFolder.addBinding(material, "roughness", {
   label: "Clarity",
   min: 0,
   max: 1,
   inverted: true,
 });
-pane.addBinding(material, "transmission", {
-  label: "Transparency",
+materialFolder.addBinding(material, "transmission", {
+  label: "Opacity",
   min: 0,
   max: 1,
   inverted: true,
 });
-pane.addBinding(material, "thickness", {
+lightingFolder.addBinding(material, "thickness", {
   label: "Refraction",
   min: 0,
   max: 15,
 });
-pane.addBinding(material, "clearcoat", {
+lightingFolder.addBinding(material, "clearcoat", {
   min: 0,
   max: 1,
 });
-pane.addBinding(material, "clearcoatRoughness", {
+lightingFolder.addBinding(material, "clearcoatRoughness", {
+  label: "Surface roughness"
   min: 0,
   max: 1,
 });
-pane.addBinding(material, "envMapIntensity", {
+lightingFolder.addBinding(material, "envMapIntensity", {
   label: "Env. 💡",
   min: 0,
   max: 1,
 });
-pane
+materialFolder
   .addBinding(material, "normalScale", {
     label: "Texture",
     y: { inverted: true, min: -1, max: 1 },
@@ -171,11 +186,18 @@ pane
   .on("change", function (e) {
     material.clearcoatNormalScale = e.value;
   });
-pane.addBinding(material, "color");
+materialFolder.addBinding(material, "color");
+positionFolder.addBinding(group, "scale");
+positionFolder.addBinding(group, "rotation");
 
 // Render it all
-const render = () => {
-  material;
+const render = (t) => {
+  const theta = t / 3000;
+  const radius = 2;
+  // group.scale.setX(Math.cos(Math.PI + theta) * radius)
+  // parallelogramMesh.rotateX(0.0015);
+  // parallelogramMesh.rotateY(0.00115 * theta);
+  // parallelogramMesh.rotateZ(0.00125);
   renderer.render(scene, camera);
   controls.update();
   requestAnimationFrame(render);
